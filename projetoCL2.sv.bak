@@ -1,0 +1,43 @@
+module projetoCL2 (input [5:0] A, [5:0]B, reset, selModo, [2:0]selOp, output [6:0]otULA, Co, zero);
+
+	always_comb begin 
+	
+		case (selModo)
+			
+			0: case(selOp) 
+					3'b000: otULA = A + B;
+					3'b001: otULA = A - B;
+					3'b010: otULA = A + not(B);
+					3'b011: otULA = A - not(B);
+					3'b100: otULA = A + 1;
+					3'b101: otULA = A - 1;
+					3'b110: otULA = B + 1;
+					3'b111: otULA = B - 1;
+					if (otULA > 6'b111111) begin
+							Co = 1;
+							end
+					endcase
+			
+			1: case (selOp)
+					3'b000: otULA = A & B;
+					3'b001: otULA = ~A;
+					3'b010: otULA = ~B;
+					3'b011: otULA = A | B;
+					3'b100: otULA = A ^ B;
+					3'b101: otULA = ~(A & B);
+					3'b110: otULA = A;
+					3'b111: otULA = B;
+			
+			endcase
+			
+			
+			if(reset == 1) begin 
+				otULA = 7'b0000000;
+				Co = 0;
+				zero = 0;
+			end
+		
+		
+	end
+
+endmodule
